@@ -103,7 +103,7 @@ public extension Request {
 
     /// Builds `URLRequest` from properties of `self`.
     /// - Throws: `RequestError`, `Error`
-    public func buildURLRequest() throws -> URLRequest {
+    public func buildURLRequest(withoutCache: Bool) throws -> URLRequest {
         let url = path.isEmpty ? baseURL : baseURL.appendingPathComponent(path)
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             throw RequestError.invalidBaseURL(baseURL)
@@ -130,6 +130,9 @@ public extension Request {
         urlRequest.url = components.url
         urlRequest.httpMethod = method.rawValue
         urlRequest.setValue(dataParser.contentType, forHTTPHeaderField: "Accept")
+        if withoutCache {
+            urlRequest.cachePolicy = .reloadIgnoringCacheData
+        }
 
         headerFields.forEach { key, value in
             urlRequest.setValue(value, forHTTPHeaderField: key)
