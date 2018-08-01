@@ -38,7 +38,7 @@ open class Session {
     /// - returns: The new session task.
     @discardableResult
     open class func send<Request: APIKit.Request>(_ request: Request, withoutCache: Bool, callbackQueue: CallbackQueue? = nil, handler: @escaping (Result<Request.Response, SessionTaskError>) -> Void = { _ in }) -> SessionTask? {
-        return shared.send(request, callbackQueue: callbackQueue, handler: handler, withoutCache: withoutCache)
+        return shared.send(request, withoutCache: withoutCache, callbackQueue: callbackQueue, handler: handler)
     }
 
     /// Calls `cancelRequests(with:passingTest:)` of `sharedSession`.
